@@ -417,8 +417,11 @@
                                             </div>
                                             <div>
                                                 <label for="roles" class="form-label">Role</label>
-                                                <select class="form-select" name="roles" size="2" id="roles" multiple th:field="*{roles}">
-                                                    <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.getRole().replace('ROLE_', '')}">Roles</option>
+                                                <select class="form-select" name="roles" size="2" id="roles" multiple
+                                                        th:field="*{roles}">
+                                                    <option th:each="role : ${roles}" th:value="${role.id}"
+                                                            th:text="${role.getRole().replace('ROLE_', '')}">Roles
+                                                    </option>
                                                 </select>
                                             </div>
                                             <button type="submit"
