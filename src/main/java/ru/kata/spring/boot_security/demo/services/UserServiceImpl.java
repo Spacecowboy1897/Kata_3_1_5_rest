@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,@Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
 
@@ -48,9 +49,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(User user) {
         if (user != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            Optional<User> oldUser = userRepository.findById(user.getId());
+            if (oldUser.get().getPassword().equals(user.getPassword()) || "".equals(user.getPassword())) {
+                user.setPassword(oldUser.get().getPassword());
+            } else {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             userRepository.save(user);
-        } else {
+        }
+         else {
             throw new EntityNotFoundException();
         }
 

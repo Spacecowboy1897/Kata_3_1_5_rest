@@ -22,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<User> showUserPage(Principal principal) {
         return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
     }
